@@ -34,10 +34,8 @@ The DEIM algorithm implemented in this code takes a given input dataset and perf
 
 ## File Structure
 
-- `main.py`: The main script that executes the DEIM algorithm.
-- `Functions/`: Directory containing various utility functions and modules used by the main script.
+- `DEIM_class.py`: The main script that executes the DEIM algorithm.
 - `data/`: Directory containing sample input data files (if applicable).
-- `results/`: Directory to store any generated output files or plots.
 
 ## License
 
