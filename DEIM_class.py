@@ -101,26 +101,31 @@ class DEIM:
         n_s = int(n_k / self.n_d)
 
         for i in range(self.n_d):
+            
             i_tf, i_xf = self.deim(self.X[:, i * n_s: (i+1) * n_s], i)
             i_tf = i_tf + i * n_s
             self.i_t.append([i_tf])
             self.i_x.append([i_xf])
-            X, T = np.meshgrid(self.x_o[i_xf], self.t_o[i_tf], indexing="ij")
-            self.X_sampled.append(X)
-            self.T_sampled.append(T)
-
+            space_o, T_o = np.meshgrid(self.x_o, self.t_o, indexing="ij")
+            
+            self.X_sampled.append(space_o)
+            self.T_sampled.append(T_o)
+            #########################
             t, space = np.meshgrid(i_tf, i_xf, indexing="ij")
-            self.u_selected.append(Exact[space, t])
-            self.t_sampled.append(t)
-            self.x_sampled.append(space)
+            self.u_selected.append(self.X[space, t])
+            self.t_sampled.append(T_o[space,t])
+            self.x_sampled.append(space_o[space, t])
+            
             X_star = np.hstack((t.flatten()[:, None], space.flatten()[:, None]))
-            plt.scatter(X_star[:,0], X_star[:,1])
-            plt.scatter(X_star[:,0], X_star[:,1], c=Exact[space, t])
+            #plt.scatter(X_star[:,0], X_star[:,1])
+            plt.scatter(X_star[:,0], X_star[:,1], c=self.X[space, t])
+            #plt.ylim([-50,600])
+            ############################
             
-            
-            self.S_star.append(self.X_sampled[i].flatten())
-            self.T_star.append(self.T_sampled[i].flatten())
+            self.S_star.append(self.x_sampled[i].flatten())
+            self.T_star.append(self.t_sampled[i].flatten())
             self.U_star.append(self.u_selected[i].flatten())
+
 
         S_s = np.concatenate(self.S_star, axis=0).reshape(-1, 1)
         T_s = np.concatenate(self.T_star, axis=0).reshape(-1, 1)
